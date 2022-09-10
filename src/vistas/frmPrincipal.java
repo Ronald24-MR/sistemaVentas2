@@ -5,6 +5,9 @@
  */
 package vistas;
 
+import java.awt.Dimension;
+import javax.swing.JInternalFrame;
+
 /**
  *
  * @author Ronald
@@ -16,7 +19,7 @@ public class frmPrincipal extends javax.swing.JFrame {
      */
     public frmPrincipal() {
         initComponents();
-         this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);
         frmLogin lo = new frmLogin(this,true);
         lo.setVisible(true);
     }
@@ -185,24 +188,34 @@ public class frmPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
-     
+        VentasForm vf = new VentasForm();
+        centrarVentana(vf);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
-       
+        ClienteForm cf = new ClienteForm();
+        centrarVentana(cf);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
-      
+        ProductoForm pf = new ProductoForm();
+        centrarVentana(pf);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         // TODO add your handling code here:
-      
+        VendedorForm vf = new VendedorForm();
+        centrarVentana(vf);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
-
+   void centrarVentana(JInternalFrame frame){
+        ventanaPrincipal.add(frame);
+        Dimension dimension = ventanaPrincipal.getSize();
+        Dimension dframe = frame.getSize();
+        frame.setLocation((dimension.width-dframe.width)/2, (dimension.height-dframe.height)/2);
+        frame.show();
+   }
     /**
      * @param args the command line arguments
      */
