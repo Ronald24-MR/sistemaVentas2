@@ -57,7 +57,7 @@ public class Ventas implements Serializable {
     private Date fechaVentas;
     @Basic(optional = false)
     @Column(name = "Montos")
-    private double montos;
+    private String montos;
     @Basic(optional = false)
     @Column(name = "Estado")
     private String estado;
@@ -77,7 +77,7 @@ public class Ventas implements Serializable {
         this.idVentas = idVentas;
     }
 
-    public Ventas(Integer idVentas, String numeroVentas, Date fechaVentas, double montos, String estado) {
+    public Ventas(Integer idVentas, String numeroVentas, Date fechaVentas, String montos, String estado) {
         this.idVentas = idVentas;
         this.numeroVentas = numeroVentas;
         this.fechaVentas = fechaVentas;
@@ -109,11 +109,11 @@ public class Ventas implements Serializable {
         this.fechaVentas = fechaVentas;
     }
 
-    public double getMontos() {
+    public String getMontos() {
         return montos;
     }
 
-    public void setMontos(double montos) {
+    public void setMontos(String montos) {
         this.montos = montos;
     }
 

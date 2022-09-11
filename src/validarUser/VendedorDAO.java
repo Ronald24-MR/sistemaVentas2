@@ -35,7 +35,7 @@ public class VendedorDAO {
                  ev.setIdVendedor(rs.getInt(1));
                  ev.setDni(rs.getString(2));
                  ev.setNombres(rs.getString(3));
-                 ev.setTelefono(rs.getInt(4));
+                 ev.setTelefono(rs.getString(4));
                  ev.setUser(rs.getString(5));
                  ev.setEstado(rs.getString(6));
         }

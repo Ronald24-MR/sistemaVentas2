@@ -124,6 +124,11 @@ public class ClienteForm extends javax.swing.JInternalFrame {
                 txtDniActionPerformed(evt);
             }
         });
+        txtDni.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, 200, 30));
 
         txtNombres.setBackground(new java.awt.Color(204, 204, 204));
@@ -503,7 +508,11 @@ public class ClienteForm extends javax.swing.JInternalFrame {
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         // TODO add your handling code here:
-       if(tabla.getSelectedRow()>=0){
+       if(tabla.getSelectedRow()==-1){
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
+       }
+       else{
+          if(tabla.getSelectedRow()>=0){
            DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
            int m = JOptionPane.showConfirmDialog(this, "¿Deseas eliminar este registro?","ALERT",JOptionPane.INFORMATION_MESSAGE);
            if(m==JOptionPane.YES_OPTION){
@@ -518,7 +527,9 @@ public class ClienteForm extends javax.swing.JInternalFrame {
                 }
                 modelo.removeRow(tabla.getSelectedRow());
             }
+       } 
        }
+       
     }//GEN-LAST:event_jLabel9MouseClicked
 
     private void jLabel9MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseEntered
@@ -590,6 +601,18 @@ public class ClienteForm extends javax.swing.JInternalFrame {
             txtBuscar.setText("");
         }
     }//GEN-LAST:event_txtBuscarMousePressed
+
+    private void txtDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniKeyTyped
+        // TODO add your handling code here:
+        char validar=evt.getKeyChar();
+        
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresar solo numeros");
+        }
+    }//GEN-LAST:event_txtDniKeyTyped
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
