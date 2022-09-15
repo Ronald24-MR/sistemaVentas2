@@ -14,12 +14,16 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entidades.Ventas;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import validarUser.Conexion;
 
 /**
  *
@@ -202,4 +206,33 @@ public class ClienteJpaController implements Serializable {
         }
     }
     
+    
+    
+    
+    
+    Connection con;
+    Conexion cn=new Conexion();
+    PreparedStatement ps;
+    ResultSet rs;
+
+    public Cliente listarId(String dni){
+        Cliente ec = new Cliente();
+        String sql = "select * from cliente where Dni=?";
+        try{
+            con=cn.Conectar();
+            ps=con.prepareStatement(sql);
+            ps.setString(1, dni);
+            rs=ps.executeQuery();
+            while(rs.next()){
+                ec.setIdCliente(rs.getInt(1));
+                ec.setDni(rs.getString(2));
+                ec.setNombres(rs.getString(3));
+                ec.setDireccion(rs.getString(4));
+                ec.setEstado(rs.getString(5));
+            }
+        }catch(Exception ex){
+            
+        }
+        return ec;
+    }
 }

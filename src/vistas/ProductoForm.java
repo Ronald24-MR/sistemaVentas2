@@ -463,7 +463,7 @@ public class ProductoForm extends javax.swing.JInternalFrame {
         }
         else{
             String nombres = txtNombres.getText();
-            String precio = txtPrecio.getText();
+            double precio = Double.parseDouble(txtPrecio.getText());
             String stock = txtStock.getText();
             String estado = txtEstado.getSelectedItem().toString();
             

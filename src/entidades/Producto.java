@@ -6,9 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,10 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -48,15 +44,13 @@ public class Producto implements Serializable {
     private String nombres;
     @Basic(optional = false)
     @Column(name = "Precio")
-    private String precio;
+    private double precio;
     @Basic(optional = false)
     @Column(name = "Stock")
     private String stock;
     @Basic(optional = false)
     @Column(name = "Estado")
     private String estado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoidProducto")
-    private Collection<Detalleventas> detalleventasCollection;
 
     public Producto() {
     }
@@ -65,7 +59,7 @@ public class Producto implements Serializable {
         this.idProducto = idProducto;
     }
 
-    public Producto(Integer idProducto, String nombres, String precio, String stock, String estado) {
+    public Producto(Integer idProducto, String nombres, double precio, String stock, String estado) {
         this.idProducto = idProducto;
         this.nombres = nombres;
         this.precio = precio;
@@ -89,11 +83,11 @@ public class Producto implements Serializable {
         this.nombres = nombres;
     }
 
-    public String getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(String precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 
@@ -111,15 +105,6 @@ public class Producto implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
-    }
-
-    @XmlTransient
-    public Collection<Detalleventas> getDetalleventasCollection() {
-        return detalleventasCollection;
-    }
-
-    public void setDetalleventasCollection(Collection<Detalleventas> detalleventasCollection) {
-        this.detalleventasCollection = detalleventasCollection;
     }
 
     @Override

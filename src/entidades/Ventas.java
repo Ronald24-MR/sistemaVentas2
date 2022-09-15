@@ -6,10 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,12 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -53,16 +46,13 @@ public class Ventas implements Serializable {
     private String numeroVentas;
     @Basic(optional = false)
     @Column(name = "FechaVentas")
-    @Temporal(TemporalType.DATE)
-    private Date fechaVentas;
+    private String fechaVentas;
     @Basic(optional = false)
     @Column(name = "Montos")
-    private String montos;
+    private double montos;
     @Basic(optional = false)
     @Column(name = "Estado")
     private String estado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ventasidVentas")
-    private Collection<Detalleventas> detalleventasCollection;
     @JoinColumn(name = "Cliente_idCliente", referencedColumnName = "idCliente")
     @ManyToOne(optional = false)
     private Cliente clienteidCliente;
@@ -77,7 +67,7 @@ public class Ventas implements Serializable {
         this.idVentas = idVentas;
     }
 
-    public Ventas(Integer idVentas, String numeroVentas, Date fechaVentas, String montos, String estado) {
+    public Ventas(Integer idVentas, String numeroVentas, String fechaVentas, double montos, String estado) {
         this.idVentas = idVentas;
         this.numeroVentas = numeroVentas;
         this.fechaVentas = fechaVentas;
@@ -101,19 +91,19 @@ public class Ventas implements Serializable {
         this.numeroVentas = numeroVentas;
     }
 
-    public Date getFechaVentas() {
+    public String getFechaVentas() {
         return fechaVentas;
     }
 
-    public void setFechaVentas(Date fechaVentas) {
+    public void setFechaVentas(String fechaVentas) {
         this.fechaVentas = fechaVentas;
     }
 
-    public String getMontos() {
+    public double getMontos() {
         return montos;
     }
 
-    public void setMontos(String montos) {
+    public void setMontos(double montos) {
         this.montos = montos;
     }
 
@@ -123,15 +113,6 @@ public class Ventas implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
-    }
-
-    @XmlTransient
-    public Collection<Detalleventas> getDetalleventasCollection() {
-        return detalleventasCollection;
-    }
-
-    public void setDetalleventasCollection(Collection<Detalleventas> detalleventasCollection) {
-        this.detalleventasCollection = detalleventasCollection;
     }
 
     public Cliente getClienteidCliente() {

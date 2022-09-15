@@ -5,21 +5,21 @@
  */
 package controladores;
 
-import controladores.exceptions.IllegalOrphanException;
 import controladores.exceptions.NonexistentEntityException;
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import entidades.Detalleventas;
 import entidades.Producto;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import validarUser.Conexion;
 
 /**
  *
@@ -37,29 +37,11 @@ public class ProductoJpaController implements Serializable {
     }
 
     public void create(Producto producto) {
-        if (producto.getDetalleventasCollection() == null) {
-            producto.setDetalleventasCollection(new ArrayList<Detalleventas>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<Detalleventas> attachedDetalleventasCollection = new ArrayList<Detalleventas>();
-            for (Detalleventas detalleventasCollectionDetalleventasToAttach : producto.getDetalleventasCollection()) {
-                detalleventasCollectionDetalleventasToAttach = em.getReference(detalleventasCollectionDetalleventasToAttach.getClass(), detalleventasCollectionDetalleventasToAttach.getIdDetalleVentas());
-                attachedDetalleventasCollection.add(detalleventasCollectionDetalleventasToAttach);
-            }
-            producto.setDetalleventasCollection(attachedDetalleventasCollection);
             em.persist(producto);
-            for (Detalleventas detalleventasCollectionDetalleventas : producto.getDetalleventasCollection()) {
-                Producto oldProductoidProductoOfDetalleventasCollectionDetalleventas = detalleventasCollectionDetalleventas.getProductoidProducto();
-                detalleventasCollectionDetalleventas.setProductoidProducto(producto);
-                detalleventasCollectionDetalleventas = em.merge(detalleventasCollectionDetalleventas);
-                if (oldProductoidProductoOfDetalleventasCollectionDetalleventas != null) {
-                    oldProductoidProductoOfDetalleventasCollectionDetalleventas.getDetalleventasCollection().remove(detalleventasCollectionDetalleventas);
-                    oldProductoidProductoOfDetalleventasCollectionDetalleventas = em.merge(oldProductoidProductoOfDetalleventasCollectionDetalleventas);
-                }
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -68,45 +50,12 @@ public class ProductoJpaController implements Serializable {
         }
     }
 
-    public void edit(Producto producto) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Producto producto) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Producto persistentProducto = em.find(Producto.class, producto.getIdProducto());
-            Collection<Detalleventas> detalleventasCollectionOld = persistentProducto.getDetalleventasCollection();
-            Collection<Detalleventas> detalleventasCollectionNew = producto.getDetalleventasCollection();
-            List<String> illegalOrphanMessages = null;
-            for (Detalleventas detalleventasCollectionOldDetalleventas : detalleventasCollectionOld) {
-                if (!detalleventasCollectionNew.contains(detalleventasCollectionOldDetalleventas)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Detalleventas " + detalleventasCollectionOldDetalleventas + " since its productoidProducto field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Collection<Detalleventas> attachedDetalleventasCollectionNew = new ArrayList<Detalleventas>();
-            for (Detalleventas detalleventasCollectionNewDetalleventasToAttach : detalleventasCollectionNew) {
-                detalleventasCollectionNewDetalleventasToAttach = em.getReference(detalleventasCollectionNewDetalleventasToAttach.getClass(), detalleventasCollectionNewDetalleventasToAttach.getIdDetalleVentas());
-                attachedDetalleventasCollectionNew.add(detalleventasCollectionNewDetalleventasToAttach);
-            }
-            detalleventasCollectionNew = attachedDetalleventasCollectionNew;
-            producto.setDetalleventasCollection(detalleventasCollectionNew);
             producto = em.merge(producto);
-            for (Detalleventas detalleventasCollectionNewDetalleventas : detalleventasCollectionNew) {
-                if (!detalleventasCollectionOld.contains(detalleventasCollectionNewDetalleventas)) {
-                    Producto oldProductoidProductoOfDetalleventasCollectionNewDetalleventas = detalleventasCollectionNewDetalleventas.getProductoidProducto();
-                    detalleventasCollectionNewDetalleventas.setProductoidProducto(producto);
-                    detalleventasCollectionNewDetalleventas = em.merge(detalleventasCollectionNewDetalleventas);
-                    if (oldProductoidProductoOfDetalleventasCollectionNewDetalleventas != null && !oldProductoidProductoOfDetalleventasCollectionNewDetalleventas.equals(producto)) {
-                        oldProductoidProductoOfDetalleventasCollectionNewDetalleventas.getDetalleventasCollection().remove(detalleventasCollectionNewDetalleventas);
-                        oldProductoidProductoOfDetalleventasCollectionNewDetalleventas = em.merge(oldProductoidProductoOfDetalleventasCollectionNewDetalleventas);
-                    }
-                }
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -124,7 +73,7 @@ public class ProductoJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -135,17 +84,6 @@ public class ProductoJpaController implements Serializable {
                 producto.getIdProducto();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The producto with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            Collection<Detalleventas> detalleventasCollectionOrphanCheck = producto.getDetalleventasCollection();
-            for (Detalleventas detalleventasCollectionOrphanCheckDetalleventas : detalleventasCollectionOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Producto (" + producto + ") cannot be destroyed since the Detalleventas " + detalleventasCollectionOrphanCheckDetalleventas + " in its detalleventasCollection field has a non-nullable productoidProducto field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(producto);
             em.getTransaction().commit();
@@ -202,4 +140,26 @@ public class ProductoJpaController implements Serializable {
         }
     }
     
+    
+    
+    Connection con;
+    Conexion cn = new Conexion();
+    PreparedStatement ps;
+    ResultSet rs;
+
+    int r;
+    
+    public int actualizarStock(int cant, int idp){
+        String sql = "update producto set Stock=? where idProducto=?";
+        try{
+           con=cn.Conectar();
+           ps=con.prepareStatement(sql);
+           ps.setInt(1, cant);
+           ps.setInt(2, idp);
+           ps.executeUpdate();
+        }catch(Exception e){
+            
+        }
+        return r;
+    }
 }

@@ -33,7 +33,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ventanaPrincipal = new javax.swing.JDesktopPane();
+        principal = new javax.swing.JDesktopPane();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -50,14 +50,14 @@ public class frmPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(6);
 
-        javax.swing.GroupLayout ventanaPrincipalLayout = new javax.swing.GroupLayout(ventanaPrincipal);
-        ventanaPrincipal.setLayout(ventanaPrincipalLayout);
-        ventanaPrincipalLayout.setHorizontalGroup(
-            ventanaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout principalLayout = new javax.swing.GroupLayout(principal);
+        principal.setLayout(principalLayout);
+        principalLayout.setHorizontalGroup(
+            principalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 586, Short.MAX_VALUE)
         );
-        ventanaPrincipalLayout.setVerticalGroup(
-            ventanaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        principalLayout.setVerticalGroup(
+            principalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 370, Short.MAX_VALUE)
         );
 
@@ -171,11 +171,11 @@ public class frmPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ventanaPrincipal)
+            .addComponent(principal)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ventanaPrincipal)
+            .addComponent(principal)
         );
 
         pack();
@@ -210,8 +210,8 @@ public class frmPrincipal extends javax.swing.JFrame {
         centrarVentana(vf);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
    void centrarVentana(JInternalFrame frame){
-        ventanaPrincipal.add(frame);
-        Dimension dimension = ventanaPrincipal.getSize();
+        principal.add(frame);
+        Dimension dimension = principal.getSize();
         Dimension dframe = frame.getSize();
         frame.setLocation((dimension.width-dframe.width)/2, (dimension.height-dframe.height)/2);
         frame.show();
@@ -264,6 +264,6 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JDesktopPane ventanaPrincipal;
+    public static javax.swing.JDesktopPane principal;
     // End of variables declaration//GEN-END:variables
 }

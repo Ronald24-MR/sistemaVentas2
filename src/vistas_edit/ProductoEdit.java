@@ -407,7 +407,7 @@ public class ProductoEdit extends javax.swing.JDialog {
         int fila = tabla.getSelectedRow();
         
         String nombres = txtNombres.getText();
-        String precio = txtPrecio.getText();
+        double precio = Double.parseDouble(txtPrecio.getText());
         String stock = txtStock.getText();
         String estado = txtEstado.getSelectedItem().toString();
         
@@ -464,7 +464,7 @@ public class ProductoEdit extends javax.swing.JDialog {
                 Producto pro = p.findProducto(codigo);
                 
                 txtNombres.setText(pro.getNombres());
-                txtPrecio.setText(pro.getPrecio());
+                
                 txtStock.setText(pro.getStock());
                 txtEstado.setSelectedItem(pro.getEstado());
             }

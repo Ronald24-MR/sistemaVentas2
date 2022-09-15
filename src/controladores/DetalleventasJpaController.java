@@ -8,16 +8,14 @@ package controladores;
 import controladores.exceptions.NonexistentEntityException;
 import entidades.Detalleventas;
 import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import entidades.Producto;
-import entidades.Ventas;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -39,25 +37,7 @@ public class DetalleventasJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Producto productoidProducto = detalleventas.getProductoidProducto();
-            if (productoidProducto != null) {
-                productoidProducto = em.getReference(productoidProducto.getClass(), productoidProducto.getIdProducto());
-                detalleventas.setProductoidProducto(productoidProducto);
-            }
-            Ventas ventasidVentas = detalleventas.getVentasidVentas();
-            if (ventasidVentas != null) {
-                ventasidVentas = em.getReference(ventasidVentas.getClass(), ventasidVentas.getIdVentas());
-                detalleventas.setVentasidVentas(ventasidVentas);
-            }
             em.persist(detalleventas);
-            if (productoidProducto != null) {
-                productoidProducto.getDetalleventasCollection().add(detalleventas);
-                productoidProducto = em.merge(productoidProducto);
-            }
-            if (ventasidVentas != null) {
-                ventasidVentas.getDetalleventasCollection().add(detalleventas);
-                ventasidVentas = em.merge(ventasidVentas);
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -71,36 +51,7 @@ public class DetalleventasJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Detalleventas persistentDetalleventas = em.find(Detalleventas.class, detalleventas.getIdDetalleVentas());
-            Producto productoidProductoOld = persistentDetalleventas.getProductoidProducto();
-            Producto productoidProductoNew = detalleventas.getProductoidProducto();
-            Ventas ventasidVentasOld = persistentDetalleventas.getVentasidVentas();
-            Ventas ventasidVentasNew = detalleventas.getVentasidVentas();
-            if (productoidProductoNew != null) {
-                productoidProductoNew = em.getReference(productoidProductoNew.getClass(), productoidProductoNew.getIdProducto());
-                detalleventas.setProductoidProducto(productoidProductoNew);
-            }
-            if (ventasidVentasNew != null) {
-                ventasidVentasNew = em.getReference(ventasidVentasNew.getClass(), ventasidVentasNew.getIdVentas());
-                detalleventas.setVentasidVentas(ventasidVentasNew);
-            }
             detalleventas = em.merge(detalleventas);
-            if (productoidProductoOld != null && !productoidProductoOld.equals(productoidProductoNew)) {
-                productoidProductoOld.getDetalleventasCollection().remove(detalleventas);
-                productoidProductoOld = em.merge(productoidProductoOld);
-            }
-            if (productoidProductoNew != null && !productoidProductoNew.equals(productoidProductoOld)) {
-                productoidProductoNew.getDetalleventasCollection().add(detalleventas);
-                productoidProductoNew = em.merge(productoidProductoNew);
-            }
-            if (ventasidVentasOld != null && !ventasidVentasOld.equals(ventasidVentasNew)) {
-                ventasidVentasOld.getDetalleventasCollection().remove(detalleventas);
-                ventasidVentasOld = em.merge(ventasidVentasOld);
-            }
-            if (ventasidVentasNew != null && !ventasidVentasNew.equals(ventasidVentasOld)) {
-                ventasidVentasNew.getDetalleventasCollection().add(detalleventas);
-                ventasidVentasNew = em.merge(ventasidVentasNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -129,16 +80,6 @@ public class DetalleventasJpaController implements Serializable {
                 detalleventas.getIdDetalleVentas();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The detalleventas with id " + id + " no longer exists.", enfe);
-            }
-            Producto productoidProducto = detalleventas.getProductoidProducto();
-            if (productoidProducto != null) {
-                productoidProducto.getDetalleventasCollection().remove(detalleventas);
-                productoidProducto = em.merge(productoidProducto);
-            }
-            Ventas ventasidVentas = detalleventas.getVentasidVentas();
-            if (ventasidVentas != null) {
-                ventasidVentas.getDetalleventasCollection().remove(detalleventas);
-                ventasidVentas = em.merge(ventasidVentas);
             }
             em.remove(detalleventas);
             em.getTransaction().commit();
